@@ -21,6 +21,7 @@
 	},
 	"dependencies": {
 		"debug": "^4.4.0",
-		"neverthrow": "^8.1.1"
+		"neverthrow": "^8.1.1",
+		"svelte-table": "^0.6.3"
 	}
 }

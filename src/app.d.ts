@@ -41,4 +41,6 @@ interface AuthAdapter {
 		// TEMPORARY
 		opts?: any;
 	}): Promise<Result<void>>;
+
+	getSessionToken(event: RequestEvent<Partial<Record<string, string>>, string | null>): string
 }

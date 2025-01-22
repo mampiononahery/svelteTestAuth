@@ -57,6 +57,7 @@ export const cookie: AuthAdapter = {
                 headers: { "Content-Type": "application/json" },
             });
             const user =  await request?.json();
+            console.log('user', user);
             //set user in cookies
             set_users(opts.cookies, user);
             return ok(user);
@@ -78,7 +79,11 @@ export const cookie: AuthAdapter = {
 		);
 
 		return;
-    }
+    },
+    getSessionToken(event){
+    const token =  event.cookies.get("auth_token") as string;
+    return token;
+}
 }
 
 function set_users(cookies: Cookies, users: User[]) {

@@ -1,40 +1,33 @@
 <script lang="ts">
 	import { applyAction, enhance } from "$app/forms";
 	import { goto } from "$app/navigation";
-	
-
 	import type { ActionData } from "./$types";
-
-	
-
 	export let form: ActionData;
-
+	let loading = false;
 	
 </script>
 
+
 <section class="max-w-sm mx-auto">
 	<div class="prose">
-		<h1 class="">Authentification</h1>
+		<h1 class="">Login page</h1>
 		
 	</div>
 	<form
 		class="flex flex-col gap-6 my-6"
 		method="POST"
-		use:enhance={() =>
-			async ({ result }) => {
-				
-
+		use:enhance={() => {
+			loading = true;
+			return async ({ result }) => {
 				await applyAction(result);
+				loading = false;
 
-				// TODO: this is kinda a hack since redirecting in the
-				// action doesn't work because we can't also update page
-				// data.
 				if (result.type === "success") {
 					const user = result.data?.user;
-					// if (user) $session.user = user;
 					await goto("/dashboard");
 				}
 			}}
+		}
 	>
 		{#if form?.error}
 			<div class="alert alert-error">
@@ -67,16 +60,15 @@
 			/>
 		</p>
 		<p class="flex items-center gap-6 mt-6">
-			<button class="btn btn-primary">Log In</button>
+			<button class="btn btn-primary">Login</button>
 			or
-			<a href="/signup" class="link">Sign Up</a>
+			<a href="/signup" class="link">Register</a>
 		</p>
 	</form>
 
-	{#if form}
-		<section class="my-12 prose">
-			<h3>Form data:</h3>
-			<pre>{JSON.stringify(form, null, 2)}</pre>
-		</section>
+	{#if loading}
+		<p>
+			Please wait ...
+		</p>
 	{/if}
 </section>

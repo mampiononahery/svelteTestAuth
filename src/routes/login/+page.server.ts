@@ -2,14 +2,14 @@ import { auth } from "$lib/auth";
 import { AUTH_TOKEN_EXPIRY_SECONDS } from "$lib/constants.server";
 import type { Actions } from "@sveltejs/kit";
 import { fail , redirect } from "@sveltejs/kit";
-import { err } from "neverthrow";
+
 
 export const actions: Actions = {
     async default(event) {
         const data = await event.request.formData();
 		const email = data.get("email") as string;
 		const password = data.get("password") as string;
-        
+
         const resp = await auth.login({
 			email,
 			password,

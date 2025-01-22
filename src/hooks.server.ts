@@ -1,10 +1,10 @@
-import type { Handle } from "@sveltejs/kit";
+import type { Handle, HandleFetch } from "@sveltejs/kit";
 import { redirect, fail  } from "@sveltejs/kit";
 import { auth } from "$lib/auth";
 
 export const handle: Handle = async ({ event, resolve }) => {
   
-    const token = event.cookies.get("auth_token") as string;
+    const token = auth.getSessionToken(event);
 
     if (token) {
       const resp = await auth.validate_session({
@@ -30,4 +30,19 @@ export const handle: Handle = async ({ event, resolve }) => {
     }
   
     return resolve(event);
+}
+
+export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
+
+  const token = auth.getSessionToken(event);
+
+  const modifiedRequest = new Request(request, {
+    headers: {
+      ...request.headers,
+      Authorization: `Token ${token}`,
+      "Content-Type": "application/json"
+    }
+  });
+
+  return fetch(modifiedRequest);
 }
